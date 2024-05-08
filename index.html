@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera Recording</title>
+  <style type="text/css">
+    /* Styles pour le conteneur de la boîte */
+    #formBox {
+      width: 300px; /* Largeur de la boîte */
+      margin: 0 auto; /* Centre la boîte horizontalement */
+      text-align: center; /* Centre les éléments du formulaire à l'intérieur de la boîte */
+      padding: 20px; /* Ajouter un espace autour du contenu de la boîte */
+      border: 2px solid #ccc; /* Ajouter une bordure */
+      border-radius: 10px; /* Ajouter des coins arrondis à la boîte */
+    }
+
+    /* Styles pour le titre du formulaire */
+    #formTitle {
+      font-size: 20px; /* Taille de police pour le titre */
+      margin-bottom: 20px; /* Marge en bas pour séparer le titre du formulaire */
+    }
+
+    /* Styles pour le formulaire */
+    #formContainer input[type="text"],
+    #formContainer button {
+      padding: 10px; /* Ajouter un rembourrage pour les éléments du formulaire */
+      margin: 5px; /* Ajouter une marge entre les éléments du formulaire */
+      border: none; /* Supprimer les bordures */
+      border-radius: 5px; /* Ajouter des coins arrondis */
+    }
+
+    /* Styles pour le texte animé */
+    
+    .container {
+      display: flex;
+      justify-content: center;
+    }
+
+    @keyframes textclip {
+      to {
+        background-position: 200% center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="formBox">
+      <div id="formTitle">Formulaire De Présence En Ligne</div>
+      <div id="formContainer">
+        <input type="text" id="videoNameInput" placeholder="Votre nom et prénom" />
+        <button id="startRecording">Commencer l'enregistrement</button>
+        <button id="satisfait" style="display: none;">Satisfait</button>
+        <button id="nonSatisfait" style="display: none;">Non Satisfait</button>
+        <div id="messageContainer"></div>
+      </div>
+    </div>
+  </div>
+  <div id="welcomeText" class="animate-character" style="display: none;"></div>
+  <video id="videoElement" width="640" height="480" autoplay style="display: none;"></video>
+  <video id="recordedVideo" width="640" height="480" controls style="display: none;"></video>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const formBox = document.getElementById("formBox");
+      const welcomeText = document.getElementById("welcomeText");
+      const videoElement = document.getElementById("videoElement");
+      const startRecordingButton = document.getElementById("startRecording");
+      const satisfaitButton = document.getElementById("satisfait");
+      const nonSatisfaitButton = document.getElementById("nonSatisfait");
+      const videoNameInput = document.getElementById("videoNameInput");
+      const texts = [
+      {
+  "text_1": "Hashing is a technique in computer science used to efficiently map data of arbitrary size to fixed-size values. This process involves applying a hash function, which takes an input and produces a unique output, known as a hash value or hash code. It's essential to note that hash functions must be carefully designed to minimize the likelihood of collisions where different inputs produce the same hash value.",
+  "text_2": "Object-oriented programming (OOP) is a programming paradigm that revolves around the concept of objects, which are instances of classes containing both data and methods. By modeling real-world entities as objects and leveraging concepts like abstraction and inheritance, OOP facilitates the creation of complex, scalable software systems.",
+  "text_3": "Binary search is a search algorithm employed to efficiently locate a target value within a sorted array or list. The algorithm operates by repeatedly dividing the array into halves and comparing the target value with the middle element. This divide-and-conquer approach reduces the search time logarithmically with respect to the size of the input array, resulting in faster search performance.",
+  "text_4": "Encryption is a technique used to safeguard sensitive information from unauthorized access or interception. It involves transforming plaintext data into ciphertext using cryptographic algorithms and keys. The resulting ciphertext appears as gibberish to anyone without the corresponding decryption key, thereby preserving the confidentiality and integrity of the original data.",
+  "text_5": "Big O notation is a mathematical notation used in computer science to describe the performance characteristics or complexity of algorithms. It provides a standardized method for expressing the upper bound or worst-case scenario of an algorithm's time or space requirements relative to the size of its input. The notation typically represents the asymptotic growth rate of an algorithm's resource usage, disregarding constant factors and lower-order terms.",
+  "text_6": "Recursion is a programming technique where a function calls itself to solve a problem by breaking it down into smaller, similar subproblems. It provides an elegant and concise solution to a wide range of problems, including those involving hierarchical or self-referential structures like trees, graphs, and fractals. However, while recursion offers simplicity and readability, it also comes with potential drawbacks, such as increased memory usage due to maintaining a call stack.",
+  "text_7": "TCP/IP (Transmission Control Protocol/Internet Protocol) is the foundational communication protocol used for transmitting data across networks, including the internet. It provides a standardized framework for establishing and maintaining connections between devices, facilitating reliable and orderly transmission of data packets. Understanding TCP/IP is essential for network administrators, software developers, and cybersecurity professionals, as it underpins virtually all internet-based communication activities.",
+  "text_8": "Named after the Dutch computer scientist Edsger W. Dijkstra, this algorithm finds the shortest paths between nodes in graphs by iteratively selecting the vertex with the lowest tentative distance from a designated source vertex and updating the distances to its neighboring vertices accordingly. The algorithm terminates once it has visited all vertices or when the shortest path to the target vertex is found.",
+  "text_9": "Virtualization is a technology that abstracts and isolates computing resources from the underlying hardware, allowing multiple virtual instances to coexist and operate independently on a single physical host. This decoupling of software from hardware provides numerous benefits, including enhanced resource utilization, scalability, and flexibility in managing computing environments.",
+  "text_10": "Machine learning (ML) is a subset of artificial intelligence focused on developing algorithms and models that enable computers to learn from data and make predictions or decisions without being explicitly programmed. The process of machine learning typically involves several stages, including data preprocessing, model training, evaluation, and deployment.",
+  "text_11": "Now, let's expand the columns a little bit. Let's say your client wants to change the date format from EOS to US format. You can also do that by going to custom and then write down month and year. And you can also change the dates based on location.",
+  "text_12": "Programming languages are designed to be able to interpret instructions from non-English speaking people into machine code. This is where programming languages come into play. They can be used to perform tasks such as moving a robot or constructing a website.",
+  "text_13": "The if statement is a conditional statement used directly after an if statement. It will only be evaluated if the proceeding if or the preceding LTIF. statement is bypassed due to its condition being false. So we would run through it like so. If something is true. We would then run that code segment.",
+  "text_14": "A switch statement is a functionally similar to many if and else's statements. It allows you to write out how many cases the variable could be, and then execute the instructions listed under each case. This can lead to clutter amongst your code.",
+  "text_15": "The hacker who hacked her bank account at the airport has said that she would not have been able to secure her transaction without a VPN. \"It's like stealing your identity from someone else,\" said the hacker. She added, \"The hacker will be able to steal your personal information.\"",
+  "text_16": "Hey guys. This is a number from Simply Learn. It's a pleasure to welcome you all in this exciting video. We are going to learn about ExpressJS but before that... Let me give you an example. If you have to write a RESTful script, it will be written in JavaScript.",
+  "text_17": "Cybersecurity is the art of protecting our networks and devices from unauthorized access. It's also known as cyber-security in short, which means that you can shop online, make online bake transfers, and much more. The video was recorded by Simply Learn.",
+  "text_18": "Apache's Spark is an open source. cluster computing framework that was initially developed at UC Berkeley in the AMPLab. Spark provides. to 100. faster performance. See you, Aplig. indications with in memory. primitive. This makes it suitable for machine learning algorithms. As it allows. programs to load data into the memory of a... and query the data constantly.",
+  "text_19": "The presenter of this week's Public Speaks is... Wrenji. I would ask everyone. to give him the Chantel. Could you dim the light? British imposed a lot of unpopular taxes on the American colonists. and didn't let them elect.representatives to the British government. In retaliation, the Americans started to boycott British goods.",
+  "text_20": "The pipeline function is the most high-level API of the Transformers library. It regroups all the steps to go for more text. To use the more predictions. So, when they're used... is to cover the pipeline. But the pipelines also include all the necessary processing since the model does not expect text.",
+  "text_21": "The traffic of the north. Nail Patel. Specialists, SOA, ditertutie en lign. Mah Et al'sais N'Et si n'out pour maisprintaseri. C'est tuÉt te plus les solutiones apporteez! I did it myself, too. If you liked that comment share it would be nice to talk to you.",
+  "text_22": "Two computer engineers, Ryan and Dave, decide to play the game of Flip the Coin on their computer. The computer plays the first move, but Ryan doesn't know what it was, either heads or tails. On his turn, he can either choose to flip the coin or not, and similarly, even if his results will not be revealed to the computer.",
+  "text_23": "Xórizóst Femi, who throws her finger on the desk with a muffin Beam who throws off coffee again Now for a valid reason that have been amendable The idea is Medik This new mat talks about how seams can be dyed pianists and the Rashing the foods has allowed you to decide which foods you like.",
+  "text_24": "A proxy server acts as a gateway between a user and its destination website. When Jonathan couldn't access a news website, he connected his system to a global proxy server. Once connected, the proxy server assigns an IP address of a different country where the website is not censored.",
+  "text_25": "A phishing attack is a type of social engineering where a fraudulent message is sent to a target on the premise of arriving from a trusted source. Its basic purpose is to trick the victim into revealing sensitive information like passwords and payment information. The hacker then uses the data to create a fake website, giving him complete control over the account whose password was just provided.",
+  "text_26": "Artificial intelligence (AI) is a subset of artificial intelligence. It uses algorithms to mimic human learnings in machines, such as clustering and association, to make sense of things from huge amounts of data. AI can learn how to distinguish between a cat and a dog by using photos of the animal's features.",
+  "text_27": "The term \"machine learning\" is a subset of artificial intelligence and it refers to the intelligence exhibited by the machines, that is a computer system. Machine learning makes predictions or decisions using a complex statistics and mathematical models. It has applications in various industries from marketing and finance to healthcare, agriculture and entertainment.",
+  "text_28": "Java is the most popular programming language in the world. It was developed by Brendan Eich in the year 1995, and has been synonymous with the rise of the internet itself. Earlier, Netscape hired Eich to create a new scripting language with syntax similar to Java and C++. Within 10 days, he developed a new language which he originally named Java Mocha.",
+  "text_29": "An aspiring entrepreneur, Adam, is interested in hosting an online store for home decor products like vases, curtains, artwork, and home furnishings. He requires a software application that would allow the customers to browse the available products at their fingertips and buy them online. Adam meets his cousin Mark, who is a software developer and a good one at it.",
+  "text_30": "Malcolm Gladwell wrote a book three years ago, Out, liars. Los Que Sobre Salen, about what it takes to be world class. \"I'm going to do a quick look at the details of the project. I'm going to do a quick look at the details of the project,\" said Gladwell.",
+  "text_31": "The trial of Albert Einstein, who once said, \"Everybody's a genius, but if you judge a fish by its ability to climb a tree, it will live its whole life believing that it is stupid.\" He also made fish climb trees and made them do a 10-mile run. I call school to the stand and accuse him of killing creativity, individuality, and being intellectually abusive.",
+  "text_32": "Speaking at a conference, 19 out of 20 speakers will start in one of these three ways. I'm Irish, 38 years old. I have an interest in sailing, I like running. I say in networking the best thing you can do is walk up. I think we know someone in common. Try and walk away.",
+  "text_33": "The number of talks that I'm giving is one. Interesting facts imparted thus far in said talk. Well, that's going to be a zero. My height in inches is 70 point. Note the point. Five there. 2 times 6 equals and then interestingly enough, 6 times 2 also equals That's my height in inches.",
+  "text_34": "A self-introduction is an important part of a job interview, as it decides how the interviewer perceives you. The first part of your introduction should be about who you are. You can then say, \"My name is Josh\" or \"I am Linda,\" if the interviewer hasn't taken your name already.",
+  "text_35": "In this session, we will learn how to format date in Excel. But before we begin, let me tell you guys that we have daily updates on multiple technologies. Let's get back to the practice mode. So now let's go ahead and select the cells from the menu. Now let's see the different formats that. weekend. change to or customize to.",
+  "text_36": "R Challenger Jo Petro got world results at the Lizanco Sunrise at Range on Sunday. He will be presenting his presentation on the causes and effects of stress, which is also being discussed in Public Speaks. \"I would ask. everyone. to give him the Chantel,\" said Jo. \"It's very hard. to give her. presentation and front of the end.\"",
+  "text_37": "Artificial intelligence (AI) is a technology that has revolutionized industries across all sectors. It's estimated that the global AI market will reach $267 billion by 2027. This means that businesses can start embracing AI in a few years. However, there is a 25% probability that AI will resemble humans when it comes to thinking capacity.",
+  "text_38": "As you can see, there are six of us. And we have already as a group. before we decided which sides we were gonna be. We came up with the Four. constructive argument. You can see on the board. These are just outline. of argument. things like. Coal causes the most air pollution deaths. in China. and the source. New York Times.",
+  "text_39": "We're going to show you how to run Docker on Ubuntu, and we'll be executing the basic commands. The first thing we want to do is see what our Docker image lists are. So let's go ahead and create. a Docker image. And this will allow us to run I don't know. fun too. image and it's around the latest image.",
+  "text_40": "A digital marketer, Joey is the head of digital marketing for Amazon.com. He started a digital marketing campaign for his uncle's e-commerce website in 2012. After learning about digital marketing, he set up a content marketing campaign on Google and other search engines. The first step was to create content on keywords relevant to the target audience.",
+  "text_41": "The DevOps culture is implemented in several phases with the help of tools like Git and Gradle. The first phase is the planning phase, where the development team puts down a plan, designs and builds the system from scratch, and the operations team for testing and implementation of whatever is developed.",
+  "text_42": "Deep learning is a type of machine learning, inspired by the structure of the human brain. It's a technique to achieve AI through algorithms trained with data. Artificial intelligence is a technique that enables a machine to mimic human behavior.",
+  "text_43": "Emma is a data scientist. She works with Python and SaaS for modeling the data. However, she prefers to use R and SaaS for modeling the data. Emma's main task is to identify the model that best solves the business requirement.",
+  "text_44": "The popularity of data science exploded in the 2010s, causing an approximate 15% year-on-year growth in the job market and is expected to grow even higher in the coming decade. Data science professionals are in high demand with average sales going as high as $1,864 per item. Companies like Microsoft, Google and Amazon hire data scientists as they deal with problem solving models involving massive amounts of data daily.",
+  "text_45": "With 4.9 billion people using the internet in 2022, cybersecurity now has to protect users against ranges like viruses, malware, adware, and other ransomware attacks. It involves techniques that help secure various digital components like networks, data, and computer systems from unauthorized access.",
+  "text_46": "There is a lack of skilled cybersecurity professionals who can tackle the cybersecurity challenges faced daily. The basic requirement for a career in cybersecurity is a bachelor's degree in a subject relating to cybersecurity. However, if you don't have a relevant degree, you can always take up relevant cybersecurity certifications and kickstart your cybersecurity journey.",
+  "text_47": "Cryptocurrency is a virtual or digital currency that works on blockchain technology and is designed to work as a medium of exchange online to buy goods and services and make payments. It was introduced to the world first in 2013 by Satoshi Nakamoto. Frank explained that cryptocurrency is decentralized and free from any third-party interference, which means it is not issued and controlled by any government or central authority.",
+  "text_48": "Approximately 40 exabytes of data gets generated every month by a single smartphone user. Now, imagine this number multiplied by 5 billion smartphone users. This is quite a lot for traditional computing systems to handle. So, how do you classify any data as big data? Let's have a look at the data generated per minute on the internet.",
+  "text_49": "In order to find the elements Carp Come! For example, Vacheron Francaise. \"Come on, come on, come on, Bert\" is a French word for \"come on, come on\", which means \"come on, come on\". It's an algorithm of 3D automatics of natural language. NLP, but this is for the result of no-run.",
+  "text_50": "AWS, or Amazon Web Services, is a secure cloud computing platform that provides computing power, database, networking, content storage, and much more. The platform also works with a pay-as-you-go pricing model, which means you only pay for how much of the services you use.",
+  "text_51": "My thesis aims to find new sources of anti-parasitic drugs. \"We need new treatment. But. Where do we? find. drug. was your first thought. CVS or Walgreen's? Me too. but historically this wasn't an option for infected individuals. and instead They looked for treatments in native plants and animals.",
+  "text_52": "An example of an IDE can be seen on your screen. In the center you can see the program that is currently being written and right below it is the console. This particular IDE is used to write Java code.",
+  "text_53": "The console is a text interface within your computer. It's used by programmers to output text from the program. This is done by using a print statement. A print statement is a command that does exactly what it sounds like. It prints text to the console.",
+  "text_54": "The computer already knows how to do basic arithmetic. This includes addition, subtraction, multiplication, and division. All of which are represented by the symbol shown on the screen now. You'll be able to print out the answer to simple math problems using the print statement.",
+  "text_55": "A variable is simply something that can store information and can be referenced and manipulated. Think of variables like cardboard boxes, which store items in them. Cardboard boxes serve as means to store items for the programmer to modify or change.",
+  "text_56": "Using a cardboard box example, we can create a variable without putting any information inside of it. This would be like if you built up a new cardboard box and gave it a label with a sharpie. but just... didn't put information inside of it. You're simply saving that space in your storage facility. for later.",
+  "text_57": "Programmers use arrays when they want to store a lot of variables containing information that is all related to each other, such as a grocery list or a high score list in the game. This is something we'll cover in a moment. Let's say you own an app with 100,000 users. Every time a user wants to create an account, they input the username they want.",
+  "text_58": "A programming loop is a statement that is used to run certain instructions repeatedly. Loops are very useful for a variety of reasons. For instance, imagine you want to print something 15 times. But this is really annoying to have to do. Now what if instead of rewriting the same instructions over and over again?",
+  "text_59": "Errors in scripting languages can be narrowed down to one of three types. Syntax errors, runtime errors and logic errors are the most common type of errors that we'll be covering in this video. Runtime errors are referred to as failed to meet the programming rules.",
+  "text_60": "If you've encountered one of the three errors mentioned above, then read the error. Often times for syntax and runtime errors, the IDE will print an error message out to the console. See what line or line set points do. since those will be the lines that the error occurred.",
+  "text_61": "A function is a segment of code that can be easily run by calling the function name. It's like wrapping up a segment of code into a nice present. and giving it a name. which when called. will unwrap the present. And the computer does it. for us. This is actually the main theme of all functions and the backbone of any good program.",
+  "text_62": "Functions can be created and used without taking arguments in and still be incredibly useful to the programmer. For example, if you were making a text-based RPG game, you would give your player the option to view their stats at various points throughout the game. You could instead package the six different print statements. in a simple function. print stats. Since the function will do the same thing no matter what the statistics on the function player are.",
+  "text_63": "A library is simply a collection of functions that all have the same theme. and maybe a math library. data analysis library. or a library which translates text. There's such a variety of libraries for any given language that most functions you require that are not hyper-specific to your program can likely be found in some libraries.",
+  "text_64": "Generally, you're going to want to follow the same camel-case style which we talked about in the variables video. which is not capitalizing the first word. but capitalizing each word after that. All right. So in general for making functions. Each language differentiates on how you tell the computer computer that it's actually. function.",
+  "text_65": "Arrays are basically lists of values that are stored together. When you initialize an array, You give it a size. and this size is fixed. You won't be able to increase the size of the array. However, as the size of an array is fixed, you have to be careful not to reference the position.",
+  "text_66": "Typically, searching algorithms are used to return the index of a particular data. point so that it can be modified or checked on. However, when you're a multi-billion dollar corporation trying to find a certain data, even a 1% improvement in efficiency can mean a big difference in the amount of time that a user is waiting for a simple task.",
+  "text_67": "A linear search is an algorithm that searches for names on a list of people. It uses a recursive process to break the data into more and more chunks. The binary search uses a recursive process to break the data down into more and more chunks.",
+  "text_68": "In programming, recursion refers to functions that repeatedly call themselves in the instructions that occur within a function. One of the instructions will be a call to that same function you're already in. Let's make an integer function which takes an integer as its argument. To better understand these functions, let's discuss the basics of how we go about programming.",
+  "text_69": "The world of computer science is vast. and contains many fields. So trying to cover everything in one language would be impossible. This has led to the creation of hundreds of different programming languages. each designed for a specific test.",
+  "text_70": "The next step is to learn a programming language, which can be done right here on YouTube. You can start with an introduction series and work your way through the series until you become comfortable with it. Hackerang provides programming challenges to keep you on your toes."
+      }];
+
+      let textIndex = 0;
+let mediaRecorder;
+let recordedChunks = [];
+let currentTextKey = ""; // Global variable to store the current text key
+let testing=0;
+function displayRandomText() {
+  const randomIndex = Math.floor(Math.random() * texts.length);
+  const randomTextObject = texts[randomIndex];
+  const randomTextKeys = Object.keys(randomTextObject);
+  const randomTextKey = randomTextKeys[Math.floor(Math.random() * randomTextKeys.length)];
+  const randomText = randomTextObject[randomTextKey];
+  welcomeText.textContent = randomText;
+  welcomeText.style.display = "block"; // Make sure welcomeText is visible
+  currentTextKey = randomTextKey; // Update the current text key
+  console.log("Current Text Key:", currentTextKey); // Debugging output
+}
+
+function startRecording() {
+  const satisfaction = satisfaitButton.style.display === "none" ? 0 : 1;
+  const textNumber = textIndex + 1; // Text index starts from 0, so increment by 1
+  const videoName = videoNameInput.value.trim().replace(/\s+/g, '_');
+  const filename = `${videoName}_${currentTextKey}_${satisfaction}.mp4`; // Update filename with textNumber
+  console.log("Generated Filename:", filename); // Debugging output
+if (testing==0) {
+  displayRandomText();
+  testing=1;
+}
+
+  recordedChunks = [];
+  mediaRecorder = new MediaRecorder(videoElement.srcObject);
+  mediaRecorder.ondataavailable = function (event) {
+
+    if (event.data.size > 0) {
+      recordedChunks.push(event.data);
+    }
+  };
+  /*mediaRecorder.onstop = function () {
+    const recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
+    const recordedVideoUrl = URL.createObjectURL(recordedBlob);
+    const a = document.createElement("a");
+    a.href = recordedVideoUrl;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(recordedVideoUrl);
+    textIndex++;
+     if (textIndex < 5) {
+      setTimeout(displayRandomText, 3000); // Display next text after 3 seconds
+    } else {
+      console.log("Recording finished.");
+    }
+  };*/
+  mediaRecorder.start();
+  startRecordingButton.style.display = "none";
+  satisfaitButton.style.display = "block"; // Show satisfaction buttons
+  nonSatisfaitButton.style.display = "block"; // Show satisfaction buttons
+}
+
+function handleSatisfaitClick() {
+  stopRecording(1);
+}
+
+function handleNonSatisfaitClick() {
+  stopRecording(0);
+}
+function displayThankYouMessage() {
+  // Hide all elements on the page
+  videoElement.style.display = "none";
+  welcomeText.style.display = "none"; // Hide the welcome text
+  videoNameInput.style.display = "none"; // Hide the video name input
+  startRecordingButton.style.display = "none";
+  satisfaitButton.style.display = "none";
+  nonSatisfaitButton.style.display = "none";
+  const thankYouMessage = document.createElement("div");
+  thankYouMessage.textContent = "Merci pour votre contribution!";
+  thankYouMessage.style.color = "green";
+  thankYouMessage.style.fontSize = "50px";
+  thankYouMessage.style.textAlign = "center";
+  document.body.appendChild(thankYouMessage); 
+  startRecordingButton.removeEventListener("click", startRecording);
+  satisfaitButton.removeEventListener("click", handleSatisfaitClick);
+  nonSatisfaitButton.removeEventListener("click", handleNonSatisfaitClick);// Append to body or any specific container you want
+
+}
+function stopRecording(satisfaction) {
+  mediaRecorder.stop();
+  const textNumber = textIndex + 1; // Text index starts from 0, so increment by 1
+  const videoName = videoNameInput.value.trim().replace(/\s+/g, '_');
+  const filename = `${videoName}_${currentTextKey}_${satisfaction}.mp4`;
+  console.log("Generated Filename:", filename); // Debugging output
+
+  if (textIndex < 5) {
+    setTimeout(() => startRecording(satisfaction), 200); // Start recording next text after 1 second
+  }
+
+  mediaRecorder.onstop = function () {
+    const recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
+    const recordedVideoUrl = URL.createObjectURL(recordedBlob);
+    const a = document.createElement("a");
+    a.href = recordedVideoUrl;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(recordedVideoUrl);
+    textIndex++;
+     if (textIndex < 5) {
+      setTimeout(displayRandomText, 500); // Display next text after 3 seconds
+    } else {
+
+      displayThankYouMessage();
+    }
+  };
+}
+
+startRecordingButton.addEventListener("click", startRecording);
+satisfaitButton.addEventListener("click", handleSatisfaitClick);
+nonSatisfaitButton.addEventListener("click", handleNonSatisfaitClick);
+
+navigator.mediaDevices
+  .getUserMedia({ video: true })
+  .then(function (stream) {
+    videoElement.srcObject = stream;
+  })
+  .catch(function (error) {
+    console.error("Error accessing camera:", error);
+  });
+
+// Start with the first random text
+
+
+    });
+  </script>
+</body>
+</html>
